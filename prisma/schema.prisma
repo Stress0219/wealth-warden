@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Para diferenciar ingresos de los gastos
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+
+ model User {
+  id         Int          @id @default(autoincrement()) 
+  email      String       @unique
+  name       String?
+  createdAt  DateTime     @default(now())
+  transactions   Transaction[]
+ }
+
+ model Category {
+  id          Int         @id @default(autoincrement())
+  name        String      
+  transaction  Transaction[]
+ }
+
+ model Transaction {
+  id          Int          @id  @default(autoincrement())
+  amount      Float
+  type        TransactionType
+  description String?
+  date        DateTime     @default(now())
+  user        User         @relation(fields: [userId], references: [id])
+  userId      Int
+  category    Category     @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+
+  @@index([userId])
+  @@index([categoryId])
+ }
+
+
