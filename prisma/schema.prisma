@@ -30,7 +30,7 @@ enum TransactionType {
  model Category {
   id          Int         @id @default(autoincrement())
   name        String      
-  transaction  Transaction[]
+  transactions  Transaction[]
  }
 
  model Transaction {
